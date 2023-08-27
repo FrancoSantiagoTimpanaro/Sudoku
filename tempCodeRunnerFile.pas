@@ -5,35 +5,35 @@ type
 
 function EsValidoFila (fila,columna,num: integer; tablero: matriz ):boolean; 
 begin
-    EsValidoFila:=true;
     for columna:=1 to 9 do begin
 		if (tablero[fila, columna] = num) then
-    		EsValidoFila:=false;
+    		EsValidoFila:=true;
 	end;
+    EsValidoFila:=false; 
 end;
 
-Function EsValidoColumna (fila, columna, num: integer; tablero: matriz): boolean;
+Function EsValidoColumna (fila, num,columna: integer; tablero: matriz): boolean;
 begin
-    EsValidoColumna:=true;
     for fila:=1 to 9 do begin
         if (tablero[fila,columna]=num) then
-    	    EsvalidoColumna:=false;
+    	    EsvalidoColumna:=true;
     end;
+    EsValidoColumna:=false;
 end;
 
 
-procedure esValidoFC(fila, columna, num: integer; tablero: matriz);
+function esValidoFC(fila, columna, num: integer; tablero: matriz): boolean;
 begin
-    if(EsValidoFila(fila, columna, num, tablero) and EsValidoColumna(fila, columna, num, tablero)) then
-        writeln('El numero es valido')
+    if(EsValidoFila(fila, columna, num, tablero) and EsvalidoColumna(fila, columna, tablero, num)) then
+        esValidoFC:= true;
     else
-    	writeln('El numero no es valido');
+    	esValidoFC:= false;
 end;
 
 
 var
     sudoku: matriz;
-    f,c, num: integer;
+    f,c: integer;
 
 begin
     for f:= 1 to 9 do begin
@@ -81,8 +81,5 @@ begin
         end;
         writeln();
     end;
-    f:= 1;
-    c:= 3;
-    num:= 2;
-    esValidoFC(f, c, num, sudoku);
+    readln();
 end.
