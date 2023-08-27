@@ -3,7 +3,7 @@ type
     // rangoNum = 1..9;
     matriz = array [1..9,1..9] of integer;
 
-function EsValidoFila (fila,columna,num: integer; tablero: matriz ):boolean; 
+function esValidoFila (fila,columna,num: integer; tablero: matriz ):boolean; 
 begin
     EsValidoFila:=true;
     for columna:=1 to 9 do begin
@@ -12,7 +12,7 @@ begin
 	end;
 end;
 
-Function EsValidoColumna (fila, columna, num: integer; tablero: matriz): boolean;
+Function esValidoColumna(fila, columna, num: integer; tablero: matriz): boolean;
 begin
     EsValidoColumna:=true;
     for fila:=1 to 9 do begin
@@ -21,6 +21,23 @@ begin
     end;
 end;
 
+
+
+function esValidoCuadrante(fila, columna, num: integer; tablero: matriz): boolean;
+var
+    posFila, posColumna, i, j: integer;
+begin
+    esValidoCuadrante:= true;
+    posFila:= 3 * ((fila -1) div 3) + 1; //Esta parte calcula en qué grupo de tres filas se encuentra la fila dada. Multiplicamos el grupo de tres filas por 3 para obtener la primera fila de la subcuadrícula en la que se encuentra la celda. 
+    posColumna:= 3 * ((Columna -1) div 3) + 1;
+    for i:=posFila to posFila+2 do begin
+        for j:=posColumna to posColumna+2 do begin
+            if(tablero[i,j]= num) then
+                esValidoCuadrante:= false;
+        end;
+    end;
+    writeln('Se evalua la fila', posFila, ' y la columna', posColumna);
+end;
 
 procedure esValidoFC(fila, columna, num: integer; tablero: matriz);
 begin
@@ -81,8 +98,11 @@ begin
         end;
         writeln();
     end;
-    f:= 1;
-    c:= 3;
-    num:= 2;
-    esValidoFC(f, c, num, sudoku);
+    f:= 6;
+    c:= 8;
+    num:= 4;
+    if (esValidoCuadrante(f,c,num,sudoku)) then
+        writeln('El numero es valido')
+    else
+        writeln('El numero no es valido');
 end.
