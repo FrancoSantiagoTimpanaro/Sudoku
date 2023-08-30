@@ -104,5 +104,5 @@ begin
     if (esValidoCuadrante(f,c,num,sudoku)) then
         writeln('El numero es valido')
     else
-        writeln('El numero no es valido');
+        writeln('El numero no es validoo');
 end.
