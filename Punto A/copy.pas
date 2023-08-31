@@ -35,7 +35,7 @@ begin
                 esValidoCuadrante:= false;
         end;
     end;
-    writeln('Se evalua la fila', posFila, ' y la columna', posColumna);
+    // writeln('Se evalua la fila', posFila, ' y la columna', posColumna);
 end;
 
 function esPosValida(fila, columna, num: integer; tablero: matriz):boolean;
@@ -46,26 +46,29 @@ begin
     	esPosValida:= false;
 end;
 
-function resolverSudoku(tablero: matriz): boolean;
+function resolverSudoku(var tablero: matriz): boolean;
 var
     fila,columna, numero: integer;
 begin
     for fila:= 1 to 9 do begin
         for columna:= 1 to 9 do begin
             if(tablero[fila,columna] = 0) then begin
+                writeln('Se evalua la posicion fila: ', fila, ' columna: ', columna);
                 for numero:= 1 to 9 do begin
                     if (esPosValida(fila, columna, numero, tablero)) then
+                    begin
                         tablero[fila,columna]:= numero;
                         if (resolverSudoku(tablero)) then
-                            resolverSudoku:= true
+                            Exit(true)
                         else
                             tablero[fila,columna]:= 0;
+                    end;
                 end;
-                resolverSudoku:= false;
+                Exit(false);
             end;
         end;
-    resolverSudoku:= true;
     end;
+    Exit(true);
 end;
 
 
@@ -73,7 +76,7 @@ var
     plantilla: text;
     cadena: string;
     sudoku: matriz;
-    i, j, indice, aux, f, c, num: integer;
+    i, j, indice, aux: integer;
 
 begin
     assign(plantilla, 'sudoku.txt');

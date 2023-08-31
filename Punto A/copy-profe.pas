@@ -35,7 +35,7 @@ begin
                 esValidoCuadrante:= false;
         end;
     end;
-    writeln('Se evalua la fila', posFila, ' y la columna', posColumna);
+    writeln('Se evalua la fila', posFila, ' y la columna', posColumna)
 end;
 
 function esPosValida(fila, columna, num: integer; tablero: matriz):boolean;
@@ -55,11 +55,13 @@ begin
             if(tablero[fila,columna] = 0) then begin
                 for numero:= 1 to 9 do begin
                     if (esPosValida(fila, columna, numero, tablero)) then
+                    begin
                         tablero[fila,columna]:= numero;
                         if (resolverSudoku(tablero)) then
                             resolverSudoku:= true
                         else
                             tablero[fila,columna]:= 0;
+                    end;
                 end;
                 resolverSudoku:= false;
             end;
