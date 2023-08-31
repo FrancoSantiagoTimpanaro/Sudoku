@@ -68,7 +68,6 @@ begin
             end;
         end;
     end;
-    Exit(true);
 end;
 
 
