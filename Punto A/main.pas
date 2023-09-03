@@ -1,7 +1,9 @@
 program tp1;
 type
-    matriz = array [1..9,1..9] of integer;
-
+    // matriz = array[1..9,1..9] of integer;
+const
+    filas = 9;
+    columnas = 9;
 function esValidoFila (fila,columna,num: integer; tablero: matriz ):boolean; 
 begin
     EsValidoFila:=true;
@@ -20,8 +22,6 @@ begin
     end;
 end;
 
-
-
 function esValidoCuadrante(fila, columna, num: integer; tablero: matriz): boolean;
 var
     posFila, posColumna, i, j: integer;
@@ -35,73 +35,79 @@ begin
                 esValidoCuadrante:= false;
         end;
     end;
-    writeln('Se evalua la fila', posFila, ' y la columna', posColumna);
+    // writeln('Se evalua la fila', posFila, ' y la columna', posColumna); Comentario para ver que la evaluacion sea correcta
 end;
 
-procedure esValidoFC(fila, columna, num: integer; tablero: matriz);
+function esPosValida(fila, columna, numero: integer; tablero: matriz):boolean;
 begin
-    if(EsValidoFila(fila, columna, num, tablero) and EsValidoColumna(fila, columna, num, tablero)) then
-        writeln('El numero es valido')
+    if(EsValidoFila(fila, columna, numero, tablero) and EsValidoColumna(fila, columna, numero, tablero) and esValidoCuadrante(fila, columna, numero, tablero)) then
+        esPosValida:= true
     else
-    	writeln('El numero no es valido');
+    	esPosValida:= false;
+end;
+
+function resolverSudoku(var tablero: matriz): boolean;
+var
+    fila,columna, numero: integer;
+begin
+    for fila:= 1 to 9 do begin
+        for columna:= 1 to 9 do begin
+            if(tablero[fila,columna] = 0) then begin
+                // writeln('Se evalua la posicion fila: ', fila, ' columna: ', columna); Comentario para ver que la evaluacion sea correcta
+                for numero:= 1 to 9 do begin
+                    if (esPosValida(fila, columna, numero, tablero)) then
+                    begin
+                        tablero[fila,columna]:= numero;
+                        if (resolverSudoku(tablero)) then
+                            Exit(true)
+                        else
+                            tablero[fila,columna]:= 0;
+                    end;
+                end;
+                Exit(false);
+            end;
+        end;
+    end;
 end;
 
 
 var
+    plantilla: text;
+    cadena: string;
     sudoku: matriz;
-    f,c, num: integer;
+    i, j, indice, aux: integer;
 
 begin
-    for f:= 1 to 9 do begin
-        for c:= 1 to 9 do begin
-            sudoku[f,c]:= 0;
-        end;
-    end;
-    sudoku[1,1]:= 1;
-    sudoku[1,5]:= 8;
-    sudoku[1,9]:= 9;
-    sudoku[2,2]:= 5;
-    sudoku[2,4]:= 6;
-    sudoku[2,6]:= 1;
-    sudoku[2,8]:= 2;
-    sudoku[3,4]:= 5;
-    sudoku[3,6]:= 3;
-    sudoku[4,2]:= 9;
-    sudoku[4,3]:= 6;
-    sudoku[4,4]:= 1;
-    sudoku[4,6]:= 4;
-    sudoku[4,7]:= 8;
-    sudoku[4,8]:= 3;
-    sudoku[5,1]:= 3;
-    sudoku[5,5]:= 6;
-    sudoku[5,9]:= 5;
-    sudoku[6,2]:= 1;
-    sudoku[6,3]:= 5;
-    sudoku[6,4]:= 9;
-    sudoku[6,6]:= 8;
-    sudoku[6,7]:= 4;
-    sudoku[6,8]:= 6;
-    sudoku[7,4]:= 7;
-    sudoku[7,6]:= 5;
-    sudoku[8,2]:= 8;
-    sudoku[8,4]:= 3;
-    sudoku[8,6]:= 9;
-    sudoku[8,8]:= 7;
-    sudoku[9,1]:= 5;
-    sudoku[9,5]:= 1;
-    sudoku[9,9]:= 3;
+    assign(plantilla, 'sudoku.txt');
+    Reset(plantilla);
+    readln(plantilla, cadena);
+    close(plantilla);
 
-    for f:= 1 to 9 do begin
-        for c:= 1 to 9 do begin
-            write(sudoku[f,c], ' ');
-        end;
-        writeln();
+    // Verificar si el string tiene la cantidad de caracteres esperados
+    if Length(cadena) <> filas * columnas then
+    begin
+        Writeln('El string no tiene la longitud requerida para un sudoku');
+        Exit;
     end;
-    f:= 6;
-    c:= 8;
-    num:= 4;
-    if (esValidoCuadrante(f,c,num,sudoku)) then
-        writeln('El numero es valido')
-    else
-        writeln('El numero no es validoo');
+    indice:= 1;
+    for i:= 1 to filas do begin
+        for j:= 1 to columnas do begin
+            aux:=Ord(cadena[indice]); //Convierte el char a codigo Ascii
+            sudoku[i,j]:= aux - 48; //-48 porque los num en codigo Ascii empiezan en 48
+            indice:= indice + 1;
+        end;
+    end;
+    
+    
+
+    resolverSudoku(sudoku);
+
+    for i:= 1 to filas do begin
+        for j:= 1 to columnas do begin
+            write(sudoku[i,j], ' ');
+        end;
+        writeln;
+    end;
 end.
+
+//Sudokus con los que se probo: 530070000600195000098000060800060003400803001700020006060000280000419005000080079 y 020608000580009700000040000370000500600000004008000013000020000009800036000306090

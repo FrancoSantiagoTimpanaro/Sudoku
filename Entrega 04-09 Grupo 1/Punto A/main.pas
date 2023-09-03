@@ -35,12 +35,12 @@ begin
                 esValidoCuadrante:= false;
         end;
     end;
-    // writeln('Se evalua la fila', posFila, ' y la columna', posColumna);
+    // writeln('Se evalua la fila', posFila, ' y la columna', posColumna); Comentario para ver que la evaluacion sea correcta
 end;
 
-function esPosValida(fila, columna, num: integer; tablero: matriz):boolean;
+function esPosValida(fila, columna, numero: integer; tablero: matriz):boolean;
 begin
-    if(EsValidoFila(fila, columna, num, tablero) and EsValidoColumna(fila, columna, num, tablero) and esValidoCuadrante(fila, columna, num, tablero)) then
+    if(EsValidoFila(fila, columna, numero, tablero) and EsValidoColumna(fila, columna, numero, tablero) and esValidoCuadrante(fila, columna, numero, tablero)) then
         esPosValida:= true
     else
     	esPosValida:= false;
@@ -53,7 +53,7 @@ begin
     for fila:= 1 to 9 do begin
         for columna:= 1 to 9 do begin
             if(tablero[fila,columna] = 0) then begin
-                writeln('Se evalua la posicion fila: ', fila, ' columna: ', columna);
+                // writeln('Se evalua la posicion fila: ', fila, ' columna: ', columna); Comentario para ver que la evaluacion sea correcta
                 for numero:= 1 to 9 do begin
                     if (esPosValida(fila, columna, numero, tablero)) then
                     begin
@@ -109,3 +109,5 @@ begin
         writeln;
     end;
 end.
+
+//Sudokus con los que se probo: 530070000600195000098000060800060003400803001700020006060000280000419005000080079 y 020608000580009700000040000370000500600000004008000013000020000009800036000306090
